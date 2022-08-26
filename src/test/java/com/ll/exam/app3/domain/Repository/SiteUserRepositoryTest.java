@@ -18,7 +18,11 @@ class SiteUserRepositoryTest {
     @Test
     @DisplayName("회원 생성")
     public void 회원_생성된다() {
-        SiteUser siteUser1 = new SiteUser(null, "user1", "{noop}1234", "test1@google.com");
+        SiteUser siteUser1 = SiteUser.builder()
+                .username("user1")
+                .password("{noop}1234")
+                .email("test1@google.com")
+                .build();
         SiteUser siteUser2 = new SiteUser(null, "user2", "{noop}1234", "test2@google.com");
 
         siteUserRepository.saveAll(Arrays.asList(siteUser1, siteUser2));
