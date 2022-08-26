@@ -53,6 +53,9 @@ dependencies {
 
 	// poi (엑셀 파일 처리용 라이브러리)
 	implementation 'org.apache.poi:poi-ooxml:5.2.2'
+
+	//쿼리출력
+	implementation("com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.0")
 }
 
 tasks.named('test') {
