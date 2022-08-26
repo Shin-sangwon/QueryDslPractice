@@ -1,4 +1,4 @@
-package com.ll.exam.app3.domain.Repository;
+package com.ll.exam.app3.global;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.context.annotation.Bean;
