@@ -9,4 +9,6 @@ public interface SiteUserRepositoryCustom {
     SiteUser getQslUserOrderByIdAscOne();
 
     List<SiteUser> getQslUsersOrderByIdAsc();
+
+    List<SiteUser> getQslUsersUsingContains(String str);
 }

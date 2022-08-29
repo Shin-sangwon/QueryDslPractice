@@ -54,4 +54,14 @@ public class SiteUserRepositoryImpl implements SiteUserRepositoryCustom{
 
     }
 
+    @Override
+    public List<SiteUser> getQslUsersUsingContains(String str) {
+
+        return jpaQueryFactory
+                .select(siteUser)
+                .from(siteUser)
+                .where(siteUser.username.contains(str), siteUser.email.contains(str))
+                .orderBy(siteUser.id.desc())
+                .fetch();
+    }
 }

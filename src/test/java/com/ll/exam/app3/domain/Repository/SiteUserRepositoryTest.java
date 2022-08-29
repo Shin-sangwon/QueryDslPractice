@@ -95,4 +95,17 @@ class SiteUserRepositoryTest {
         assertThat(u2.getPassword()).isEqualTo("{noop}1234");
     }
 
+    @Test
+    @DisplayName("이름, 이메일로 검색하기")
+    void t7() {
+        List<SiteUser> users = siteUserRepository.getQslUsersUsingContains("user1");
+
+        SiteUser u1 = users.get(0);
+
+        assertThat(u1.getId()).isEqualTo(1L);
+        assertThat(u1.getUsername()).isEqualTo("user1");
+        assertThat(u1.getEmail()).isEqualTo("user1@test.com");
+        assertThat(u1.getPassword()).isEqualTo("{noop}1234");
+    }
+
 }
