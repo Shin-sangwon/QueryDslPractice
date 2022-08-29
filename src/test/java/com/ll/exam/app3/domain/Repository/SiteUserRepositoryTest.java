@@ -5,12 +5,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles("test")
+@Transactional // @test + @transactional은 자동으로 롤백을 유발함. (스프링 테스트 자체 규칙)
 @SpringBootTest
 class SiteUserRepositoryTest {
 
