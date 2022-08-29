@@ -19,4 +19,13 @@ public class SiteUserRepositoryImpl implements SiteUserRepositoryCustom{
 
     }
 
+    public Long getQslUserCount() {
+
+        return jpaQueryFactory
+                .select(QSiteUser.siteUser.count())
+                .from(QSiteUser.siteUser)
+                .fetchOne();
+
+    }
+
 }
