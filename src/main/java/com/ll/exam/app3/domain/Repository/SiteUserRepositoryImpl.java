@@ -3,6 +3,10 @@ package com.ll.exam.app3.domain.Repository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
+import static com.ll.exam.app3.domain.Repository.QSiteUser.siteUser;
+
 @RequiredArgsConstructor
 public class SiteUserRepositoryImpl implements SiteUserRepositoryCustom{
 
@@ -12,9 +16,9 @@ public class SiteUserRepositoryImpl implements SiteUserRepositoryCustom{
     public SiteUser getQslUser(Long id){
 
         return jpaQueryFactory
-                .select(QSiteUser.siteUser)
-                .from(QSiteUser.siteUser)
-                .where(QSiteUser.siteUser.id.eq(id))
+                .select(siteUser)
+                .from(siteUser)
+                .where(siteUser.id.eq(id))
                 .fetchOne();
 
     }
@@ -22,8 +26,8 @@ public class SiteUserRepositoryImpl implements SiteUserRepositoryCustom{
     public Long getQslUserCount() {
 
         return jpaQueryFactory
-                .select(QSiteUser.siteUser.count())
-                .from(QSiteUser.siteUser)
+                .select(siteUser.count())
+                .from(siteUser)
                 .fetchOne();
 
     }
@@ -32,11 +36,22 @@ public class SiteUserRepositoryImpl implements SiteUserRepositoryCustom{
     public SiteUser getQslUserOrderByIdAscOne() {
 
         return jpaQueryFactory
-                .select(QSiteUser.siteUser)
-                .from(QSiteUser.siteUser)
-                .orderBy(QSiteUser.siteUser.id.asc())
+                .select(siteUser)
+                .from(siteUser)
+                .orderBy(siteUser.id.asc())
                 .limit(1)
                 .fetchOne();
+    }
+
+    @Override
+    public List<SiteUser> getQslUsersOrderByIdAsc() {
+
+        return jpaQueryFactory
+                .select(siteUser)
+                .from(siteUser)
+                .orderBy(siteUser.id.asc())
+                .fetch();
+
     }
 
 }
