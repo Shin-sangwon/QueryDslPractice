@@ -1,5 +1,7 @@
 package com.ll.exam.app3.domain.Repository;
 
+import com.ll.exam.app3.domain.user.Repository.SiteUser;
+import com.ll.exam.app3.domain.user.Repository.SiteUserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,9 +35,9 @@ class SiteUserRepositoryTest {
                 .password("{noop}1234")
                 .email("test3@google.com")
                 .build();
-        SiteUser siteUser4 = new SiteUser(null, "user4", "{noop}1234", "test4@google.com");
+        /*SiteUser siteUser4 = new SiteUser(null, "user4", "{noop}1234", "test4@google.com");*/
 
-        siteUserRepository.saveAll(Arrays.asList(siteUser3, siteUser4));
+        /*siteUserRepository.saveAll(Arrays.asList(siteUser3, siteUser4));*/
 
     }
 
@@ -169,4 +171,50 @@ class SiteUserRepositoryTest {
          */
     }
 
+    @Test
+    @DisplayName("검색, Page 리턴, id DESC, pageSize=1, page=0")
+    void t9() {
+        long totalCount = siteUserRepository.count();
+        int pageSize = 1; // 한 페이지에 보여줄 아이템 개수
+        int totalPages = (int)Math.ceil(totalCount / (double)pageSize);
+        int page = 1;
+        String kw = "user";
+
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("id"));
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(sorts)); // 한 페이지에 10까지 가능
+        Page<SiteUser> usersPage = siteUserRepository.searchQsl(kw, pageable);
+
+        assertThat(usersPage.getTotalPages()).isEqualTo(totalPages);
+        assertThat(usersPage.getNumber()).isEqualTo(page);
+        assertThat(usersPage.getSize()).isEqualTo(pageSize);
+
+        List<SiteUser> users = usersPage.get().toList();
+
+        assertThat(users.size()).isEqualTo(pageSize);
+
+        SiteUser u = users.get(0);
+
+        assertThat(u.getId()).isEqualTo(1L);
+        assertThat(u.getUsername()).isEqualTo("user1");
+        assertThat(u.getEmail()).isEqualTo("user1@test.com");
+        assertThat(u.getPassword()).isEqualTo("{noop}1234");
+    }
+
+    @Test
+    @DisplayName("검색, Page 리턴, id DESC, pageSize=1, page=0")
+    void t10() {
+        SiteUser u2 = siteUserRepository.getQslUser(2L);
+
+        u2.addInterestKeywordContent("축구");
+        u2.addInterestKeywordContent("롤");
+        u2.addInterestKeywordContent("헬스");
+        u2.addInterestKeywordContent("헬스"); // 중복등록은 무시
+
+        siteUserRepository.save(u2);
+        // 엔티티클래스 : InterestKeyword(interest_keyword 테이블)
+        // 중간테이블도 생성되어야 함, 힌트 : @ManyToMany
+        // interest_keyword 테이블에 축구, 롤, 헬스에 해당하는 row 3개 생성
+    }
 }
+

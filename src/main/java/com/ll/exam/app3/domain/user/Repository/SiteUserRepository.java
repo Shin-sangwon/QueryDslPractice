@@ -1,4 +1,4 @@
-package com.ll.exam.app3.domain.Repository;
+package com.ll.exam.app3.domain.user.Repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
