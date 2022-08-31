@@ -16,4 +16,6 @@ public interface SiteUserRepositoryCustom {
     List<SiteUser> getQslUsersUsingContains(String str);
 
     Page<SiteUser> searchQsl(String kw, Pageable pageable);
+
+    List<SiteUser> getQslUserByHabit(String habit);
 }

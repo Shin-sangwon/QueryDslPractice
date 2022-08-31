@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import java.util.Arrays;
-import java.util.List;
 
 @Configuration
 @Profile("test") // 이 클래스 정의된 Bean 들은 test 모드에서만 활성화 된다.
@@ -29,7 +28,13 @@ public class TestInitData {
                     .email("user2@test.com")
                     .build();
 
-            List<SiteUser> siteUsers = siteUserRepository.saveAll(Arrays.asList(u1, u2));
+            u1.addInterestKeywordContent("축구");
+            u1.addInterestKeywordContent("농구");
+
+            u2.addInterestKeywordContent("클라이밍");
+            u2.addInterestKeywordContent("마라톤");
+
+            siteUserRepository.saveAll(Arrays.asList(u1, u2));
         };
     }
 }

@@ -14,7 +14,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -216,5 +215,18 @@ class SiteUserRepositoryTest {
         // 중간테이블도 생성되어야 함, 힌트 : @ManyToMany
         // interest_keyword 테이블에 축구, 롤, 헬스에 해당하는 row 3개 생성
     }
+
+    @Test
+    @DisplayName("축구에 관심이 있는 회원을 검색할 수 있다.")
+    void t11() {
+        // 테스트 케이스 추가
+        // 구현, QueryDSL 사용
+        List<SiteUser> siteUsersList = siteUserRepository.getQslUserByHabit("축구");
+
+        SiteUser siteUser = siteUsersList.get(0);
+
+        assertThat(siteUser.getId()).isEqualTo(1L);
+    }
+
 }
 
