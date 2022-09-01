@@ -14,9 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 
@@ -44,6 +42,22 @@ public class SiteUser {
     @Builder.Default
     private Set<InterestKeyword> interestKeywordSet = new HashSet<>();
 
+    @Builder.Default
+    @ManyToMany(cascade = CascadeType.ALL)
+    private Set<SiteUser> followers = new HashSet<>();
+
+    // ex ) u1.follow(u2) 에서 주어는 u1, 따라서 this는 u1
+    public void follow(SiteUser u2) {
+
+        if(u2.equals(this)) {
+            return;
+        }
+
+        u2.getFollowers().add(this);
+    }
+    public void addFollower(SiteUser follower) {
+        followers.add(follower);
+    }
 
     public void addInterestKeywordContent(String keywordContent) {
         interestKeywordSet.add(new InterestKeyword(keywordContent));
