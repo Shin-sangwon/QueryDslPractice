@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -243,6 +244,46 @@ class SiteUserRepositoryTest {
         assertThat(u.getEmail()).isEqualTo("user1@test.com");
         assertThat(u.getPassword()).isEqualTo("{noop}1234");
 
+    }
+
+    @Test
+    @DisplayName("u2=아이돌, u1=팬 u1은 u2의 팔로워 이다.")
+    void t13() {
+        SiteUser u1 = siteUserRepository.getQslUser(1L);
+        SiteUser u2 = siteUserRepository.getQslUser(2L);
+
+        u1.follow(u2);
+
+        siteUserRepository.save(u2);
+    }
+
+    @Test
+    @DisplayName("본인이 본인을 follow 할 수 없다.")
+    @Rollback(false)
+    void t14() {
+        SiteUser u1 = siteUserRepository.getQslUser(1L);
+
+        u1.follow(u1);
+
+        assertThat(u1.getFollowers().size()).isEqualTo(0);
+    }
+
+    @Test
+    @DisplayName("")
+    @Rollback(false)
+    void t15() {
+        SiteUser u1 = siteUserRepository.getQslUser(1L);
+        SiteUser u2 = siteUserRepository.getQslUser(2L);
+
+        u1.follow(u2);
+
+        // 힌트 SiteUser에 ManyToMany 필드를 하나더 만든다.
+
+        u1.getFollowers(); // []
+        u1.getFollowings(); // [u1]
+
+        u2.getFollowers(); // [u1]
+        u2.getFollowings(); // []
     }
 
 }

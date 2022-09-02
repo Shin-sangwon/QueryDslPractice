@@ -1,6 +1,5 @@
 package com.ll.exam.app3.domain.user.Repository;
 
-import com.ll.exam.app3.domain.interestKeyword.repository.InterestKeyword;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.PathBuilder;
@@ -14,6 +13,7 @@ import org.springframework.data.support.PageableExecutionUtils;
 
 import java.util.List;
 
+import static com.ll.exam.app3.domain.interestKeyword.repository.QInterestKeyword.interestKeyword;
 import static com.ll.exam.app3.domain.user.Repository.QSiteUser.siteUser;
 
 @RequiredArgsConstructor
@@ -99,10 +99,11 @@ public class SiteUserRepositoryImpl implements SiteUserRepositoryCustom{
     @Override
     public List<SiteUser> getQslUserByHabit(String habit) {
         return jpaQueryFactory
-                .select(siteUser)
-                .from(siteUser)
-                .where(siteUser.interestKeywordSet.contains(new InterestKeyword(habit)))
-                .orderBy(siteUser.id.desc())
+                .selectFrom(siteUser)
+                .innerJoin(siteUser.interestKeywordSet, interestKeyword)
+                .where(
+                        interestKeyword.content.eq(habit)
+                )
                 .fetch();
     }
 

@@ -46,20 +46,24 @@ public class SiteUser {
     @ManyToMany(cascade = CascadeType.ALL)
     private Set<SiteUser> followers = new HashSet<>();
 
+    @Builder.Default
+    @ManyToMany(cascade = CascadeType.ALL)
+    private Set<SiteUser> followings = new HashSet<>();
+
     // ex ) u1.follow(u2) 에서 주어는 u1, 따라서 this는 u1
-    public void follow(SiteUser u2) {
+    public void follow(SiteUser following) {
 
-        if(u2.equals(this)) {
-            return;
-        }
+        if (this == following) return;
+        if (following == null) return;
+        if (this.getId() == following.getId()) return;
 
-        u2.getFollowers().add(this);
+        following.getFollowers().add(this);
     }
     public void addFollower(SiteUser follower) {
         followers.add(follower);
     }
 
     public void addInterestKeywordContent(String keywordContent) {
-        interestKeywordSet.add(new InterestKeyword(keywordContent));
+        interestKeywordSet.add(new InterestKeyword(this, keywordContent));
     }
 }
